@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template — Crimes de Violência e Pistolagem no Brasil</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root {
+    --bg:        #D4C5A9;
+    --ink:       #1C1C1C;
+    --blood:     #6B1D1D;
+    --shadow:    #3D4045;
+    --bg-dark:   #1a1a18;
+    --bg-mid:    #c2b499;
+    --rule:      rgba(28,28,28,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #111;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(17,17,17,0.95);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 52px;
+    border-bottom: 1px solid rgba(107,29,29,0.4);
+  }
+  nav .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    color: var(--bg);
+    opacity: 0.7;
+  }
+  .nav-pills {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-pill {
+    padding: 5px 13px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid transparent;
+    color: #aaa;
+    background: transparent;
+    transition: all .2s;
+  }
+  .nav-pill:hover { color: var(--bg); border-color: rgba(212,197,169,.25); }
+  .nav-pill.active { background: var(--blood); color: #fff; border-color: var(--blood); }
+
+  /* ─── SLIDE WRAPPER ───────────────────────────────────────── */
+  .slides-container { margin-top: 52px; width: 100%; }
+
+  .slide {
+    display: none;
+    width: 100%;
+    min-height: calc(100vh - 52px);
+    position: relative;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; }
+
+  /* ═══════════════════════════════════════════════════════════
+     SLIDE 1 — CAPA
+  ═══════════════════════════════════════════════════════════ */
+  #s1 {
+    background: var(--bg-dark);
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .s1-left {
+    flex: 0 0 58%;
+    background: var(--bg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem 3.5rem 4rem 4.5rem;
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  }
+
+  /* a linha de tensão — assinatura visual */
+  .s1-left::before {
+    content: '';
+    position: absolute;
+    top: 0; right: calc(12% + 1px);
+    width: 3px;
+    height: 100%;
+    background: var(--blood);
+    transform-origin: top;
+  }
+
+  .s1-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 1.2rem;
+  }
+
+  .s1-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    line-height: 0.95;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.4rem;
+  }
+  .s1-title span { color: var(--blood); }
+
+  .s1-subtitle {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--shadow);
+    line-height: 1.55;
+    max-width: 380px;
+    margin-bottom: 3rem;
+    border-left: 2px solid var(--blood);
+    padding-left: 1rem;
+  }
+
+  .s1-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 2rem;
+    font-size: 0.78rem;
+    color: var(--shadow);
+  }
+  .s1-meta strong {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 1px;
+  }
+
+  .s1-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 3rem 3rem 3rem 5rem;
+    position: relative;
+  }
+
+  .s1-stat {
+    text-align: center;
+    position: relative;
+  }
+  .s1-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5rem;
+    line-height: 1;
+    color: var(--blood);
+    letter-spacing: 0.02em;
+  }
+  .s1-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bg);
+    opacity: 0.5;
+    margin-top: 4px;
+  }
+  .s1-divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(212,197,169,.25);
+  }
+
+  .s1-corner {
+    position: absolute;
+    bottom: 1.5rem; right: 1.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.25);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SLIDE 2 — AGENDA
+  ═══════════════════════════════════════════════════════════ */
+  #s2 {
+    background: var(--bg);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .s2-header {
+    background: var(--ink);
+    padding: 2.5rem 5rem 2.5rem 5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-shrink: 0;
+  }
+  .s2-header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.2rem;
+    color: var(--bg);
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .s2-header-title span { color: var(--blood); }
+  .s2-header-sub {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.45);
+    padding-bottom: 6px;
+  }
+
+  .s2-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .s2-item {
+    padding: 2.8rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    position: relative;
+    transition: background .2s;
+    cursor: default;
+  }
+  .s2-item:hover { background: rgba(107,29,29,.05); }
+  .s2-item:nth-child(even) { border-right: none; }
+  .s2-item:nth-last-child(-n+2) { border-bottom: none; }
+
+  .s2-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--blood);
+    opacity: 0.22;
+    flex-shrink: 0;
+    width: 2.2rem;
+    text-align: right;
+  }
+  .s2-item-content {}
+  .s2-item-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .s2-item-desc {
+    font-size: 0.82rem;
+    color: var(--shadow);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SLIDE 3 — CONTEÚDO PADRÃO
+  ═══════════════════════════════════════════════════════════ */
+  #s3 {
+    background: var(--bg);
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .s3-sidebar {
+    flex: 0 0 7px;
+    background: var(--blood);
+    flex-shrink: 0;
+  }
+
+  .s3-inner {
+    flex: 1;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 3.5rem 5rem 3.5rem 4rem;
+    gap: 2rem;
+  }
+
+  .s3-top {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.5rem;
+  }
+  .s3-section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 0.7rem;
+  }
+  .s3-slide-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+
+  .s3-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 4rem;
+    align-content: start;
+  }
+
+  .s3-lead {
+    grid-column: 1 / -1;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--shadow);
+    line-height: 1.65;
+    max-width: 72ch;
+  }
+
+  .s3-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .s3-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .s3-bullets li::before {
+    content: '▪';
+    color: var(--blood);
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .s3-callout {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 1.5rem;
+    border-radius: 2px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    position: relative;
+  }
+  .s3-callout-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 0.6rem;
+  }
+
+  .s3-page {
+    position: absolute;
+    bottom: 2rem; right: 4rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: rgba(28,28,28,.3);
+    font-weight: 600;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SLIDE 4 — DADOS / GRÁFICOS
+  ═══════════════════════════════════════════════════════════ */
+  #s4 {
+    background: var(--bg-dark);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .s4-header {
+    padding: 2.5rem 5rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(212,197,169,.1);
+  }
+  .s4-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    color: var(--bg);
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .s4-title span { color: var(--blood); }
+  .s4-source {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.35);
+  }
+
+  .s4-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    background: rgba(212,197,169,.08);
+  }
+
+  .s4-cell {
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    position: relative;
+    gap: 0.6rem;
+  }
+
+  /* KPI cells */
+  .s4-cell.kpi .s4-kpi-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: var(--blood);
+    line-height: 1;
+  }
+  .s4-cell.kpi .s4-kpi-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.45);
+    text-align: center;
+  }
+  .s4-cell.kpi .s4-kpi-delta {
+    font-size: 0.78rem;
+    color: var(--blood);
+    font-weight: 600;
+    background: rgba(107,29,29,.18);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  /* Bar chart mockup */
+  .s4-cell.bars {
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 1.5rem 2rem 1.5rem;
+    grid-column: 2 / 4;
+    position: relative;
+  }
+  .bars-label {
+    position: absolute;
+    top: 1.5rem; left: 2rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.4);
+  }
+  .bars-chart {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.7rem;
+    height: 120px;
+  }
+  .bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .bar {
+    width: 100%;
+    background: var(--shadow);
+    border-radius: 1px 1px 0 0;
+    transition: background .2s;
+  }
+  .bar.highlight { background: var(--blood); }
+  .bar-year {
+    font-size: 0.62rem;
+    color: rgba(212,197,169,.35);
+    letter-spacing: 0.06em;
+  }
+
+  /* Map placeholder */
+  .s4-cell.map-cell {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 1.5rem 2rem;
+  }
+  .map-placeholder {
+    width: 100%;
+    flex: 1;
+    border: 1px solid rgba(212,197,169,.12);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(212,197,169,.2);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    height: 120px;
+    margin-top: 0.5rem;
+    background: rgba(212,197,169,.03);
+    position: relative;
+    overflow: hidden;
+  }
+  .map-placeholder::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(212,197,169,.03) 10px,
+      rgba(212,197,169,.03) 11px
+    );
+  }
+
+  .s4-cell.table-cell {
+    grid-column: 3;
+    grid-row: 2;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 1.5rem 1.5rem;
+  }
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+  }
+  .mini-table th {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.4);
+    font-weight: 600;
+    text-align: left;
+    padding: 0 0 0.6rem;
+    border-bottom: 1px solid rgba(212,197,169,.1);
+  }
+  .mini-table td {
+    padding: 0.55rem 0;
+    color: rgba(212,197,169,.7);
+    border-bottom: 1px solid rgba(212,197,169,.06);
+    vertical-align: middle;
+  }
+  .mini-table td:last-child { color: var(--blood); font-weight: 600; text-align: right; }
+
+  /* ═══════════════════════════════════════════════════════════
+     SLIDE 5 — IMPACTO / CITAÇÃO
+  ═══════════════════════════════════════════════════════════ */
+  #s5 {
+    background: var(--bg);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  #s5::before {
+    content: '"';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40vw;
+    line-height: 1;
+    color: var(--ink);
+    opacity: 0.04;
+    position: absolute;
+    top: -5%;
+    left: -2%;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .s5-inner {
+    max-width: 780px;
+    padding: 4rem 3rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .s5-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--blood);
+    border: 1px solid var(--blood);
+    padding: 4px 14px;
+    border-radius: 1px;
+    margin-bottom: 2.5rem;
+  }
+
+  .s5-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    line-height: 1.05;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+  .s5-quote em {
+    font-style: normal;
+    color: var(--blood);
+  }
+
+  .s5-rule {
+    width: 50px;
+    height: 2px;
+    background: var(--blood);
+    margin: 0 auto 1.5rem;
+  }
+
+  .s5-author {
+    font-size: 0.82rem;
+    color: var(--shadow);
+    line-height: 1.55;
+  }
+  .s5-author strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .s5-corner-stat {
+    position: absolute;
+    bottom: 3rem;
+    right: 4rem;
+    text-align: right;
+  }
+  .s5-corner-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--blood);
+    line-height: 1;
+    opacity: 0.6;
+  }
+  .s5-corner-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--shadow);
+    opacity: 0.5;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SLIDE 6 — CONCLUSÃO / FECHAMENTO
+  ═══════════════════════════════════════════════════════════ */
+  #s6 {
+    background: var(--ink);
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .s6-left {
+    flex: 0 0 55%;
+    background: var(--blood);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 4.5rem;
+    position: relative;
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
+  }
+
+  .s6-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.55);
+    margin-bottom: 1.2rem;
+  }
+  .s6-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+    color: var(--bg);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.8rem;
+  }
+  .s6-takeaways {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 2.5rem;
+  }
+  .s6-takeaways li {
+    font-size: 0.88rem;
+    color: rgba(212,197,169,.75);
+    line-height: 1.5;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+  .s6-takeaways li::before {
+    content: '→';
+    color: var(--bg);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .s6-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 3.5rem 4rem 5rem;
+    gap: 2.5rem;
+  }
+
+  .s6-section-head {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.3);
+    margin-bottom: 1rem;
+  }
+
+  .s6-ref-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+  }
+  .s6-ref-list li {
+    font-size: 0.78rem;
+    color: rgba(212,197,169,.55);
+    line-height: 1.45;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(212,197,169,.07);
+  }
+  .s6-ref-list li strong {
+    color: rgba(212,197,169,.8);
+    font-weight: 600;
+  }
+
+  .s6-contact-block {
+    width: 100%;
+  }
+  .s6-contact-row {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(212,197,169,.5);
+    margin-top: 0.4rem;
+    align-items: center;
+  }
+  .s6-contact-row span:first-child {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.28);
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  .s6-obrigado {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    color: rgba(212,197,169,.18);
+    margin-top: auto;
+  }
+
+  /* ─── SLIDE INDICATOR ─────────────────────────────────────── */
+  .slide-indicator {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 100;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(212,197,169,.25);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .dot.active {
+    background: var(--blood);
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  /* ─── KEYBOARD HINT ───────────────────────────────────────── */
+  .hint {
+    position: fixed;
+    bottom: 1.4rem;
+    right: 2rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(212,197,169,.2);
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="brand">PSICOLOGIA — ANTROPOLOGIA</span>
+  <div class="nav-pills">
+    <button class="nav-pill active" onclick="goTo(0)">Capa</button>
+    <button class="nav-pill" onclick="goTo(1)">Agenda</button>
+    <button class="nav-pill" onclick="goTo(2)">Conteúdo</button>
+    <button class="nav-pill" onclick="goTo(3)">Dados</button>
+    <button class="nav-pill" onclick="goTo(4)">Impacto</button>
+    <button class="nav-pill" onclick="goTo(5)">Conclusão</button>
+  </div>
+</nav>
+
+<div class="slides-container">
+
+  <!-- ══ SLIDE 1 — CAPA ══════════════════════════════════════ -->
+  <section class="slide active" id="s1">
+    <div class="s1-left">
+      <div class="s1-eyebrow">Psicologia · Antropologia · 2025</div>
+      <h1 class="s1-title">
+        Crimes de Violência<br>e <span>Pistolagem</span><br>no Cenário Brasileiro
+      </h1>
+      <p class="s1-subtitle">
+        Uma análise antropológica das dinâmicas socioculturais, estruturais e históricas que sustentam a violência por encomenda no Brasil contemporâneo.
+      </p>
+      <div class="s1-meta">
+        <div>
+          <strong>Apresentação por</strong>
+          [Nome do Apresentador]
+        </div>
+        <div>
+          <strong>Orientador(a)</strong>
+          [Nome do Docente]
+        </div>
+        <div>
+          <strong>Disciplina</strong>
+          Antropologia
+        </div>
+        <div>
+          <strong>Data</strong>
+          [00 / Mês / 2025]
+        </div>
+      </div>
+    </div>
+    <div class="s1-right">
+      <div class="s1-stat">
+        <div class="s1-stat-num">47.508</div>
+        <div class="s1-stat-label">Homicídios registrados · Brasil 2023</div>
+      </div>
+      <div class="s1-divider"></div>
+      <div class="s1-stat">
+        <div class="s1-stat-num">22,4</div>
+        <div class="s1-stat-label">Taxa por 100 mil habitantes</div>
+      </div>
+      <div class="s1-divider"></div>
+      <div class="s1-stat">
+        <div class="s1-stat-num">76%</div>
+        <div class="s1-stat-label">Vítimas por arma de fogo</div>
+      </div>
+      <div class="s1-corner">© Template Acadêmico — Uso Institucional</div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 2 — AGENDA ════════════════════════════════════ -->
+  <section class="slide" id="s2">
+    <div class="s2-header">
+      <h2 class="s2-header-title">Agenda<br><span>da Apresentação</span></h2>
+      <span class="s2-header-sub">Estrutura · 6 Blocos Temáticos</span>
+    </div>
+    <div class="s2-body">
+      <div class="s2-item">
+        <span class="s2-num">1</span>
+        <div class="s2-item-content">
+          <div class="s2-item-title">Contextualização Histórica</div>
+          <div class="s2-item-desc">Raízes da violência endêmica: colonialismo, latifúndio e formação do Estado brasileiro.</div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <span class="s2-num">2</span>
+        <div class="s2-item-content">
+          <div class="s2-item-title">Conceito de Pistolagem</div>
+          <div class="s2-item-desc">Definição antropológica, tipologias regionais e o mercado informal da morte.</div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <span class="s2-num">3</span>
+        <div class="s2-item-content">
+          <div class="s2-item-title">Dados e Panorama Nacional</div>
+          <div class="s2-item-desc">Estatísticas, mapeamento territorial e concentração de casos por região.</div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <span class="s2-num">4</span>
+        <div class="s2-item-content">
+          <div class="s2-item-title">Perspectivas Psicossociais</div>
+          <div class="s2-item-desc">Subjetividade, identidade e o papel da masculinidade hegemônica nos ciclos de violência.</div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <span class="s2-num">5</span>
+        <div class="s2-item-content">
+          <div class="s2-item-title">Marco Legal e Impunidade</div>
+          <div class="s2-item-desc">Análise crítica das falhas institucionais e do índice de elucidação de homicídios.</div>
+        </div>
+      </div>
+      <div class="s2-item">
+        <span class="s2-num">6</span>
+        <div class="s2-item-content">
+          <div class="s2-item-title">Considerações Finais</div>
+          <div class="s2-item-desc">Síntese analítica, lacunas de pesquisa e perspectivas para políticas públicas.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 3 — CONTEÚDO PADRÃO ══════════════════════════ -->
+  <section class="slide" id="s3">
+    <div class="s3-sidebar"></div>
+    <div class="s3-inner">
+      <div class="s3-top">
+        <div class="s3-section-label">Módulo 01 · Conceituação</div>
+        <h2 class="s3-slide-title">O Fenômeno da Pistolagem:<br>Definição e Dinâmicas</h2>
+      </div>
+      <div class="s3-content">
+        <p class="s3-lead">
+          A pistolagem configura uma forma de violência mercenária profundamente enraizada nas relações de poder locais, especialmente em contextos rurais e periurbanos do Nordeste e Centro-Oeste, operando como instrumento de regulação social extralegal.
+        </p>
+        <ul class="s3-bullets">
+          <li>Prática de contratação de assassinos profissionais ("pistoleiros") para eliminar adversários por motivos políticos, econômicos ou pessoais.</li>
+          <li>Historicamente associada a disputas de terra, conflitos agrários e rivalidades políticas em contextos de ausência do Estado.</li>
+          <li>Opera dentro de uma economia moral própria, com códigos de lealdade, reputação e mercantilização da violência.</li>
+          <li>Perpetua a lógica de "resolução" privada de conflitos, minando o monopólio legítimo da força estatal.</li>
+        </ul>
+        <div class="s3-callout">
+          <div class="s3-callout-label">Conceito-chave</div>
+          A pistolagem não é anomalia — é sintoma de uma ordem social que naturaliza a violência como instrumento de poder e controle territorial.
+        </div>
+      </div>
+    </div>
+    <div class="s3-page">03 / 06</div>
+  </section>
+
+  <!-- ══ SLIDE 4 — DADOS / GRÁFICOS ═════════════════════════ -->
+  <section class="slide" id="s4">
+    <div class="s4-header">
+      <h2 class="s4-title">Panorama da <span>Violência</span><br>no Brasil</h2>
+      <span class="s4-source">Fonte: Atlas da Violência · IPEA / FBSP · 2024</span>
+    </div>
+    <div class="s4-body">
+
+      <div class="s4-cell kpi">
+        <div class="s4-kpi-val">47.5K</div>
+        <div class="s4-kpi-label">Homicídios<br>registrados 2023</div>
+        <div class="s4-kpi-delta">▼ 3,2% vs 2022</div>
+      </div>
+
+      <div class="s4-cell kpi">
+        <div class="s4-kpi-val">8%</div>
+        <div class="s4-kpi-label">Taxa de elucidação<br>de homicídios</div>
+        <div class="s4-kpi-delta">≈ impunidade total</div>
+      </div>
+
+      <div class="s4-cell bars">
+        <div class="bars-label">Homicídios por Arma de Fogo — Por Região (por 100 mil hab.)</div>
+        <div class="bars-chart">
+          <div class="bar-group">
+            <div class="bar" style="height:38%"></div>
+            <div class="bar-year">Sul</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:52%"></div>
+            <div class="bar-year">SE</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:58%"></div>
+            <div class="bar-year">CO</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar highlight" style="height:92%"></div>
+            <div class="bar-year">NE</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar highlight" style="height:100%"></div>
+            <div class="bar-year">NO</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s4-cell map-cell">
+        <div class="bars-label">Concentração Territorial · Inserir Mapa de Calor</div>
+        <div class="map-placeholder">[ inserir mapa coroplético · shapefile / QGIS export ]</div>
+      </div>
+
+      <div class="s4-cell table-cell">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Estado</th>
+              <th>Taxa/100K</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Amapá</td><td>52,1</td></tr>
+            <tr><td>Bahia</td><td>46,8</td></tr>
+            <tr><td>Ceará</td><td>44,2</td></tr>
+            <tr><td>Pará</td><td>41,7</td></tr>
+            <tr><td>Maranhão</td><td>38,9</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 5 — IMPACTO / CITAÇÃO ════════════════════════ -->
+  <section class="slide" id="s5">
+    <div class="s5-inner">
+      <span class="s5-tag">Conceito Central</span>
+      <blockquote class="s5-quote">
+        "A violência não é o fracasso<br>da ordem social —<br>ela <em>é</em> a ordem social<br>em contextos de <em>exclusão radical.</em>"
+      </blockquote>
+      <div class="s5-rule"></div>
+      <div class="s5-author">
+        <strong>Alba Zaluar</strong>
+        Antropóloga — Integração Perversa: Pobreza e Tráfico de Drogas (2004)
+      </div>
+    </div>
+    <div class="s5-corner-stat">
+      <div class="s5-corner-stat-val">1 em 4</div>
+      <div class="s5-corner-stat-label">mortes violentas no mundo<br>ocorrem no Brasil</div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 6 — CONCLUSÃO ════════════════════════════════ -->
+  <section class="slide" id="s6">
+    <div class="s6-left">
+      <div class="s6-label">Considerações Finais</div>
+      <h2 class="s6-title">O que os<br>dados nos<br>revelam</h2>
+      <ul class="s6-takeaways">
+        <li>A pistolagem é fenômeno estrutural, não individual — exige resposta sistêmica.</li>
+        <li>A impunidade (92% dos homicídios não elucidados) é o principal catalisador da violência endêmica.</li>
+        <li>A perspectiva psicossocial é indispensável para compreender os ciclos de violência e os perfis de vítimas e perpetradores.</li>
+        <li>Políticas públicas efetivas dependem de diagnósticos regionalizados e interdisciplinares.</li>
+      </ul>
+    </div>
+    <div class="s6-right">
+      <div>
+        <div class="s6-section-head">Referências Principais</div>
+        <ul class="s6-ref-list">
+          <li><strong>Atlas da Violência 2024</strong> — IPEA / Fórum Brasileiro de Segurança Pública</li>
+          <li><strong>Zaluar, A. (2004)</strong> — Integração Perversa: Pobreza e Tráfico de Drogas. FGV Editora.</li>
+          <li><strong>Pinheiro, P. S. (1997)</strong> — Violência, crime e sistemas policiais em países de novas democracias. Tempo Social, USP.</li>
+          <li><strong>Misse, M. (2011)</strong> — Crime, sujeito e sujeição criminal. Lua Nova, n.79.</li>
+        </ul>
+      </div>
+      <div class="s6-contact-block">
+        <div class="s6-section-head">Contato & Identificação</div>
+        <div class="s6-contact-row">
+          <span>Nome</span> [Nome do Apresentador]
+        </div>
+        <div class="s6-contact-row">
+          <span>E-mail</span> [email@instituicao.br]
+        </div>
+        <div class="s6-contact-row">
+          <span>Turma</span> [Período / Turno]
+        </div>
+        <div class="s6-contact-row">
+          <span>Inst.</span> [Nome da Instituição]
+        </div>
+      </div>
+      <div class="s6-obrigado">OBRIGADO(A)</div>
+    </div>
+  </section>
+
+</div><!-- /slides-container -->
+
+<!-- DOTS -->
+<div class="slide-indicator">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+</div>
+
+<div class="hint">← → para navegar</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const pills  = document.querySelectorAll('.nav-pill');
+  const dots   = document.querySelectorAll('.dot');
+  let current  = 0;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    pills[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    pills[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  goTo(current + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    goTo(current - 1);
+  });
+
+  // Touch/swipe
+  let tx = 0;
+  document.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+</script>
+</body>
+</html>
